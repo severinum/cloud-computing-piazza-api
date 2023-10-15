@@ -15,11 +15,11 @@ const registerValidation = (data) => {
 }
 
 const topicValidation = (data) => {
-    const itemValidation = joi.object({
+    const schemaValidation = joi.object({
             name: joi.string().required().min(3).max(265).trim(true)
     })
 
-    return itemValidation.validate(data)
+    return schemaValidation.validate(data)
 }
 
 const loginValidation = (data) => {
@@ -30,6 +30,18 @@ const loginValidation = (data) => {
     return schemaValidation.validate(data);
 }
 
+const postValidation = (data) => {
+    const schemaValidation = joi.object({
+            title: joi.string().required().min(3).max(265).trim(true),
+            category: joi.array().items(joi.string().alphanum().trim(true)),
+            body: joi.string().required().min(3).max(3000).trim(true),
+            expiration_time: joi.number().integer()
+    })
+
+    return schemaValidation.validate(data)
+}
+
 module.exports.topicValidation = topicValidation
 module.exports.registerValidation = registerValidation
 module.exports.loginValidation = loginValidation
+module.exports.postValidation = postValidation

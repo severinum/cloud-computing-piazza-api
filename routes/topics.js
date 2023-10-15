@@ -113,10 +113,6 @@ router.delete('/:topicId', authUser, async (req, res) => {
     }
 })
 
-
-
-
-
 const checkIfTopicNameAlreadyTaken = async (findName) => {
     return await Topic.findOne({
         name: findName
