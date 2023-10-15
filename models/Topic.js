@@ -11,6 +11,12 @@ const topicsSchema = mongoose.Schema({
         min: 3,
         max: 256
     },
+    owner_id: {
+        type: String,
+        required: true,
+        min: 3,
+        max: 256
+    },
     active: {
         type: Boolean,
         default: true
