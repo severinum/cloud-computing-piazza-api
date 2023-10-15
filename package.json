@@ -1,0 +1,40 @@
+{
+    "name": "piazza-smicho01",
+    "version": "1.0.0",
+    "description": "Piazza API for Cloud Computing module",
+    "main": "app.js",
+    "scripts": {
+      "start": "nodemon app.js"
+    },
+    "dependencies": {
+      "bcryptjs": "^2.4.3",
+      "body-parser": "^1.19.1",
+      "dotenv": "^14.3.2",
+      "express": "^4.17.2",
+      "joi": "^17.6.0",
+      "jsonwebtoken": "^8.5.1",
+      "jwt-decode": "^3.1.2",
+      "mongoose": "^6.2.0",
+      "node-cron": "^3.0.0",
+      "nodemon": "^2.0.15"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/severinum/cloud-computing-piazza-api.git"
+    },
+    "keywords": [
+      "piazza",
+      "piazza",
+      "api",
+      "api",
+      "node",
+      "api"
+    ],
+    "author": "Seweryn Michota",
+    "license": "ISC",
+    "bugs": {
+      "url": "https://github.com/severinum/cloud-computing-piazza-api/issues"
+    },
+    "homepage": "https://github.com/severinum/cloud-computing-piazza-api#readme"
+  }
+  
