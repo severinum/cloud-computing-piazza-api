@@ -21,7 +21,7 @@ app.use('/api/v1/posts', postsRoute)
 
 // Route: Auth
 const authRoute = require('./routes/auth')
-app.use('/api/users', authRoute)
+app.use('/api/v1/users', authRoute)
 
 // Route: Topics
 const topicsRoute = require('./routes/topics')
