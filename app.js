@@ -19,6 +19,10 @@ app.use(bodyParser.json())
 const postsRoute = require('./routes/posts')
 app.use('/api/v1/posts', postsRoute)
 
+// Route: Activity
+const activitiesRoute = require('./routes/activity')
+app.use('/api/v1/activity', activitiesRoute)
+
 // Route: Auth
 const authRoute = require('./routes/auth')
 app.use('/api/v1/users', authRoute)

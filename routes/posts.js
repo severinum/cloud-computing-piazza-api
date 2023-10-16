@@ -51,7 +51,7 @@ router.get('/:postId', authUser, async (req, res) => {
         "expiration_time": 5  # in minutes
     }
 */
-router.post('/', authUser, authRole("admin"),  async (req, res) => {
+router.post('/', authUser, async (req, res) => {
     // Validate post data
     const {error} = postValidation(req.body)
     if(error) {
