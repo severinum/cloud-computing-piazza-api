@@ -47,9 +47,7 @@ router.post('/', authUser, authRole("admin"),  async (req, res) => {
     const loggedInUserId = TokenDecoded(req).user_id
 
     // calculate and set expire time
-    var now = new Date();
-    var expireTime = new Date();
-    expireTime.setTime(now.getTime() + (req.body.expiration_time * 60 * 1000));
+    var expireTime = calculateExpirationdate(new Date(), req.body.expiration_time )
 
     const newPost = new Post({
         title: req.body.title,
@@ -62,5 +60,43 @@ router.post('/', authUser, authRole("admin"),  async (req, res) => {
     const savedPost = await newPost.save()
     res.status(201).send(savedPost)
 })
+
+/* 
+*   PATCH. Update Post
+*   Example JSON payload: # select fields to update. expiration_time must be in minutes
+    {
+        "title": "Kittens are insane !",
+        "expiration_time": 5  # in minutes
+    }
+*/
+router.patch("/:postId", authUser, async (req, res) => {
+    const postId = req.params.postId
+    LOGGER.log("Attempt to update post id: PATCH /posts/" + postId , req)
+    try {
+        const post = await Post.findById(postId)
+        // Reset expiry time in case of any changes in that value
+        if(req.body.expiration_time) {
+            var expireTime = calculateExpirationdate(post.date_register, 
+                req.body.expiration_time )
+            LOGGER.log('Expiration time change. POST id: ' + post._id + ' to: ' +
+                expireTime, req)
+            req.body.date_expire = expireTime
+        }
+        
+        Object.assign(post, req.body)
+        post.save();
+        LOGGER.log('POST updated, id: ' + post._id, req)
+        return res.status(200).send(post)
+    } catch (err) {
+        LOGGER.log("PATCH /posts/" + postId + " error : " + err, req)
+        return res.status(404).send({message: 'Item not found'})
+    }
+})
+
+
+const calculateExpirationdate = (currentDate, expirationTime) => {
+    var expireTime = new Date();
+    return expireTime.setTime(currentDate.getTime() + (expirationTime * 60 * 1000));
+}
 
 module.exports = router

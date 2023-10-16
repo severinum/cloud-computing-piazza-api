@@ -3,6 +3,7 @@
  *  Date: October 2023
  */
 
+const {Token, TokenDecoded} = require('./Token');
 const LogModel = require('../models/Log');
 
 class Logger {
@@ -14,14 +15,29 @@ class Logger {
      * @param {Request} req Reguest. If not null, request contain User data used for log
      */
     log(message, req) {
-        const logTime = this.getTime(new Date())
-        let logMessage = "{"+ logTime +"} " + message
+        let logMessage = ""
+        // Get log time
+        let logDate = new Date();
+        const logTime = this.getTime(logDate)
+        // Get log user
+        let logUser = ''
+        if (req != null) {
+            logUser = '{user: none}'
+            if (req.headers.authorization != null) {
+                const user = TokenDecoded(req)
+                logUser = '{user: ' + user.user_id + '} '
+            }
+        }
+
+        logMessage += message + " " + logUser
         // Save log to MongoDB
         const logToSave = new LogModel({
-            date: logTime,
-            message: message
+            date: logDate,
+            message: logMessage
         })
         logToSave.save()
+
+        logMessage = "{"+ logTime +"} " + logMessage
         console.log(logMessage)
     }
 

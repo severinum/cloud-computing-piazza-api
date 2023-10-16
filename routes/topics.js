@@ -27,6 +27,19 @@ router.get('/', authUser, async (req, res) => {
 })
 
 /* 
+*   GET One topic
+*/
+router.get('/:topicId', authUser, async (req, res) => {
+    try {
+        const foundTopic = await Topic.findById(req.params.topicId)
+        return res.status(200).send(foundTopic)
+    } catch (err) {
+        return res.status(409).send({message: "Topic id not found"})
+    }
+})
+
+
+/* 
 *   POST. Add topic
 *   Example JSON payload:
     {
@@ -57,18 +70,6 @@ router.post('/', authUser, authRole("admin"),  async (req, res) => {
 
     const savedTopic = await topic.save()
     res.status(201).send(savedTopic)
-})
-
-/* 
-*   GET One topic
-*/
-router.get('/:topicId', authUser, async (req, res) => {
-    try {
-        const foundTopic = await Topic.findById(req.params.topicId)
-        return res.status(200).send(foundTopic)
-    } catch (err) {
-        return res.status(409).send({message: "Topic id not found"})
-    }
 })
 
 
