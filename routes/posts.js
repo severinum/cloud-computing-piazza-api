@@ -27,6 +27,20 @@ router.get('/', authUser, async (req, res) => {
 })
 
 /* 
+*   GET one post
+*/
+router.get('/:postId', authUser, async (req, res) => {
+    LOGGER.log("Get one post with id: " + req.params.postId , req)
+    try {
+        const post = await Post.findById(req.params.postId)
+        return res.status(200).send(post)
+    } catch (err) {
+        LOGGER.log("ERROR. Post not found. Id: " + req.params.postId , req)
+        return res.status(409).send({message: "Post by id not found"})
+    }
+})
+
+/* 
 *   POST. Add post
 *   Example JSON payload:
     {
@@ -90,6 +104,37 @@ router.patch("/:postId", authUser, async (req, res) => {
     } catch (err) {
         LOGGER.log("PATCH /posts/" + postId + " error : " + err, req)
         return res.status(404).send({message: 'Item not found'})
+    }
+})
+
+/* 
+*   DELETE one post
+*/
+router.delete('/:postId', authUser, async (req, res) => {
+    const postId = req.params.postId
+    LOGGER.log("Attempt to delete post id: DELETE /posts/" + postId , req)
+    const post = await Post.findById(postId);
+    // Check if auction exists.
+    
+    try {
+        // Check if user own post or is admin.
+        if(!authOwner(post.owner_id, req)) {
+            LOGGER.log("Unauthorised access: DELETE posts/" + postId, req)
+            return res.status(403).send({message: "Unauthorized access"})
+        }
+    } catch (err) {
+        return res.status(403).send({message: "Not found"})
+    }
+    
+    try {
+        post.deleteOne({_id: postId}, () => {
+            LOGGER.log("post deleted: DELETE posts/" + postId, req)
+        })
+        
+        return res.status(200).send({message: "post deleted : " + postId})
+    } catch(err) {
+        LOGGER.log("Error deleting post : DELETE posts/" + postId + ', ERROR: ' + err, req)
+        return res.status(409).send({message: "Error deleting post " + postId})
     }
 })
 

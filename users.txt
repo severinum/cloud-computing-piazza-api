@@ -1,0 +1,28 @@
+{
+    "username": "Administrator",
+    "email" :"admin@test.com",
+    "password" : "pa$$word123",
+    "roles": ["admin"]
+}
+
+{
+    "username": "Olga",
+    "email" :"olga@test.com",
+    "password" : "pa$$word123",
+    "roles": ["user"]
+}
+
+{
+    "username": "Nick",
+    "email" :"nick@test.com",
+    "password" : "pa$$word123",
+    "roles": ["user"]
+}
+
+
+{
+    "username": "Marry",
+    "email" :"marry@test.com",
+    "password" : "pa$$word123",
+    "roles": ["user"]
+}
