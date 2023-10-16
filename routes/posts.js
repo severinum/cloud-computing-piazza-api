@@ -26,6 +26,8 @@ router.get('/', authUser, async (req, res) => {
             if(Date.now() > post.date_expire) {
                 post.status = 'Expired'
             }
+            // TODO: get likes and comments and attach them to post
+            // maybe do it in external mentod, so it can be reused in GET ONE POST req.
         })
         return res.status(200).send(posts)
     } catch (err) {

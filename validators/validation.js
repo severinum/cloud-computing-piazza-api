@@ -44,7 +44,6 @@ const postValidation = (data) => {
 const activityValidation = (data) => {
     const schemaValidation = joi.object({
             post_id: joi.string().required().min(3).max(265).trim(true),
-            user_id: joi.string().required().min(3).max(265).trim(true),
             type: joi.string().required().min(3).max(50).trim(true),
             body: joi.string().required().min(1).max(512).trim(true)
     })
