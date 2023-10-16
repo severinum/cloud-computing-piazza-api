@@ -30,11 +30,16 @@ router.get('/', authUser, async (req, res) => {
 *   GET One topic
 */
 router.get('/:topicId', authUser, async (req, res) => {
-    try {
+    LOGGER.log("Get one topic. ID: " + req.params.topicId, req)
+    try { 
         const foundTopic = await Topic.findById(req.params.topicId)
-        return res.status(200).send(foundTopic)
+        if(foundTopic != null) {
+            return res.status(200).send(foundTopic)
+        }
+        return res.status(404).send({message: "Topic id not found"})
     } catch (err) {
-        return res.status(409).send({message: "Topic id not found"})
+        LOGGER.log("ERROR. Get one topic. ID: " + req.params.topicId + ", error: " + err, req)
+        return res.status(409).send({message: "Error while retrieving topic with id: " + req.params.topicId})
     }
 })
 
@@ -52,11 +57,11 @@ router.post('/', authUser, authRole("admin"),  async (req, res) => {
     if(error) {
         return res.status(500).send({message: error['details'][0]['message']})
     }
-    const isNameTaken = await checkIfTopicNameAlreadyTaken(req.body.name)
+    const isNameTaken = await checkIfTopicExists(req.body.name)
 
     if (isNameTaken) {
         // Topic name already taken.
-        return res.status(409).send({message: isNameTaken });
+        return res.status(409).send({message: "Topic name is taken" });
     }
 
     // Get loggedin user data from JWT token
@@ -114,19 +119,16 @@ router.delete('/:topicId', authUser, async (req, res) => {
     }
 })
 
-const checkIfTopicNameAlreadyTaken = async (findName) => {
+const checkIfTopicExists = async (findName) => {
     return await Topic.findOne({
         name: findName
     }).then(foundTopic => {
         if(foundTopic) {
-            let message = {};
-            if(foundTopic.name === findName) {
-                message =  "Topic name taken"
-            }
-            return message;
+            return true
         }
-        return false;
+        return false
     });
 }
 
 module.exports = router
+module.exports.checkIfTopicExists = checkIfTopicExists

@@ -12,6 +12,7 @@ const {Token, TokenDecoded} = require('../utils/Token');
 const dontenv = require('dotenv');
 const {postValidation} = require('../validators/validation');
 const Post = require('../models/Post')
+const {checkIfTopicExists} = require('../routes/topics')
 
 /* 
 *   GET All posts
@@ -60,6 +61,17 @@ router.post('/', authUser, authRole("admin"),  async (req, res) => {
     const jwtToken = Token(req)
     const loggedInUserId = TokenDecoded(req).user_id
 
+    // Check if all post categories (topics) exist
+    // Must exist to be assigned
+    if(req.body.category.length > 0) {
+        for(let i=0; i< req.body.category.length; i ++){
+            let currTopic = req.body.category[i]
+            if(!await checkIfTopicExists(currTopic)){
+                return res.status(409).send({message: "Topic must exist to be assinged {" + currTopic + "}"})
+            }
+        }
+    }
+    
     // calculate and set expire time
     var expireTime = calculateExpirationdate(new Date(), req.body.expiration_time )
 
