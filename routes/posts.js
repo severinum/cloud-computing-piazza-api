@@ -12,6 +12,7 @@ const {Token, TokenDecoded} = require('../utils/Token');
 const dontenv = require('dotenv');
 const {postValidation} = require('../validators/validation');
 const Post = require('../models/Post')
+const Activity = require('../models/Activity')
 const {checkIfTopicExists} = require('../routes/topics')
 
 /* 
@@ -28,6 +29,7 @@ router.get('/', authUser, async (req, res) => {
             }
             // TODO: get likes and comments and attach them to post
             // maybe do it in external mentod, so it can be reused in GET ONE POST req.
+
         })
         return res.status(200).send(posts)
     } catch (err) {
@@ -47,12 +49,52 @@ router.get('/:postId', authUser, async (req, res) => {
         if(Date.now() > post.date_expire) {
             post.status = 'Expired'
         }
-        return res.status(200).send(post)
+
+        // Copy post object to result object to add other properties to it
+        // and return it as response body
+        let result = {}
+        Object.assign( result, post._doc)
+        
+        // Get Post activities 
+        const activities = await getPostActivities(req.params.postId)
+        
+        result.like = activities.like
+        result.dislike = activities.dislike
+        result.comments = activities.comments
+        result.activities = activities.activities
+        
+        return res.status(200).send(result)
     } catch (err) {
-        LOGGER.log("ERROR. Post not found. Id: " + req.params.postId , req)
+        LOGGER.log("ERROR. Get post with id :" + req.params.postId  +
+        ", ERROR: " + err, req)
         return res.status(409).send({message: "Post by id not found"})
     }
 })
+
+const getPostActivities = async (postId) => {
+    let result = {
+        comments: 0,
+        like: 0,
+        dislike: 0,
+        activities : []
+    }
+    const postActivities = await Activity.find({post_id: postId})
+    if(postActivities.length > 0) {
+        postActivities.forEach(activity => {
+            if(activity.type == 'comment') {
+                result.comments += 1
+            }
+            if(activity.type == 'like' && activity.body == '1') {
+                result.like += 1
+            }
+            if(activity.type == 'like' && activity.body == '0') {
+                result.dislike += 1
+            }
+        })
+        result.activities = postActivities
+    }
+    return result
+}
 
 /* 
 *   POST. Add post
