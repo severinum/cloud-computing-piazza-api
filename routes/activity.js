@@ -30,6 +30,8 @@ router.post('/', authUser, async (req, res) => {
         return res.status(500).send({message: error['details'][0]['message']})
     }
 
+    // Check if post is Live
+
     const jwtToken = Token(req)
     const loggedInUserId = TokenDecoded(req).user_id
 

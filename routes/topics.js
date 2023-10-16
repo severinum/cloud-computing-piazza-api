@@ -92,7 +92,7 @@ router.delete("/all", authUser, authRole("admin"), async (req, res) => {
 /* 
 *   DELETE one topic
 */
-router.delete('/:topicId', authUser, async (req, res) => {
+router.delete('/:topicId', authUser, authRole("admin"), async (req, res) => {
     const topicId = req.params.topicId
     LOGGER.log("Attempt to delete topic id: DELETE /topics/" + topicId , req)
     // Check if auction exists.

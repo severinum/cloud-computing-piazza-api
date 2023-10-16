@@ -21,6 +21,12 @@ router.get('/', authUser, async (req, res) => {
     LOGGER.log("Get all posts", req)
     try {
         const posts = await Post.find()
+        posts.forEach(post => {
+            post.status = 'Live'
+            if(Date.now() > post.date_expire) {
+                post.status = 'Expired'
+            }
+        })
         return res.status(200).send(posts)
     } catch (err) {
         return res.status(409).send({message:err})
@@ -34,6 +40,11 @@ router.get('/:postId', authUser, async (req, res) => {
     LOGGER.log("Get one post with id: " + req.params.postId , req)
     try {
         const post = await Post.findById(req.params.postId)
+        // Add status Live/Expired to output json
+        post.status = 'Live'
+        if(Date.now() > post.date_expire) {
+            post.status = 'Expired'
+        }
         return res.status(200).send(post)
     } catch (err) {
         LOGGER.log("ERROR. Post not found. Id: " + req.params.postId , req)
