@@ -10,7 +10,7 @@ const activitySchema = mongoose.Schema({
         required: true,
         max: 256
     },
-    user_id: {
+    owner_id: {
         type: String,
         required: true,
         max: 256

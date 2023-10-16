@@ -32,6 +32,7 @@ router.post('/', authUser, async (req, res) => {
     if(error) {
         return res.status(500).send({message: error['details'][0]['message']})
     }
+    
 
     // Get post
     let post = null
@@ -42,8 +43,6 @@ router.post('/', authUser, async (req, res) => {
         if(Date.now() > post.date_expire) {
             post.status = 'Expired'
         }
-        //LOGGER.log('Attempt to start adding activity for post')
-        console.log(post)
     } catch (err) {
         LOGGER.log("ERROR. Post not found. Id: " + postId + ", ERROR: " + err , req)
         return res.status(409).send({message: "Post not found."})
@@ -55,14 +54,45 @@ router.post('/', authUser, async (req, res) => {
         return res.status(409).send({message: "Post is expired"})
     }
 
-    // Prevent post owner adding own activities
-
     const jwtToken = Token(req)
     const loggedInUserId = TokenDecoded(req).user_id
 
-    post.user_id = loggedInUserId
+    // Prevent post owner adding own activities
+    if(post.owner_id == loggedInUserId) {
+        LOGGER.log("ERROR. Can't add activities on own posts" , req)
+        return res.status(409).send({message: "Can't add activities to won posts"})
+    }
 
-    res.status(201).send('tmp message')
+    // Validate if type is valid [like or comment]
+    const isValidInput = validateActivityInputs(req.body.type, req.body.body)
+    if (!isValidInput) {
+        LOGGER.log("ERROR. Invalid activity inputs [type-body combination]" , req)
+        return res.status(409).send({message: "ERROR. Invalid activity inputs [type-body combination]"})
+    }
+
+    const newActivity = new Activity({
+        post_id: req.body.post_id,
+        type: req.body.type,
+        body: req.body.body,
+        owner_id: loggedInUserId
+    }) 
+
+    const savedActivity = await newActivity.save()
+    res.status(201).send(savedActivity)
 })
+
+const validateActivityInputs = (type, body) => {
+    
+    if(type !== 'like' && type !== 'comment') {
+        return false
+    }
+
+    if(type == 'like') {
+        if(body !== "1" && body !== "0") {
+            return false
+        }
+    }
+    return true
+}
 
 module.exports = router
