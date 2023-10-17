@@ -5,15 +5,16 @@
 const express = require('express')
 const router = express.Router()
 
-const {authUser, authRole, authOwner} = require('../verifyToken') // Verify JWT Tokens
+const { authUser, authRole, authOwner } = require('../verifyToken') // Verify JWT Tokens
 const Logger = require('../utils/Logger');
 const LOGGER = new Logger();
-const {Token, TokenDecoded} = require('../utils/Token');
+const { Token, TokenDecoded } = require('../utils/Token');
 const dontenv = require('dotenv');
-const {postValidation} = require('../validators/validation');
+const { postValidation } = require('../validators/validation');
 const Post = require('../models/Post')
 const Activity = require('../models/Activity')
-const {checkIfTopicExists} = require('../routes/topics')
+const User = require('../models/User');
+const { checkIfTopicExists } = require('../routes/topics')
 
 /* 
 *   GET All posts
@@ -22,22 +23,15 @@ router.get('/', authUser, async (req, res) => {
     LOGGER.log("Get all posts", req)
     try {
         const posts = await Post.find()
-        posts.forEach(post => {
-            post.status = 'Live'
-            if(Date.now() > post.date_expire) {
-                post.status = 'Expired'
-            } else {
-                const minToExpire = calculateMinutesToexpire(post.date_expire)
-                post.minutes_to_expire = minToExpire
-            }
-            // TODO: get likes and comments and attach them to post
-            // maybe do it in external mentod, so it can be reused in GET ONE POST req.
+        let result = []
+        for (const post of posts) {
+            result.push(await toPostDTO(post))
+        }
 
-        })
-        return res.status(200).send(posts)
+        return res.status(200).send(result)
     } catch (err) {
-        LOGGER("ERROR: Get all posts, ERROR:  "+ err, req)
-        return res.status(409).send({message:err})
+        LOGGER("ERROR: Get all posts, ERROR:  " + err, req)
+        return res.status(409).send({ message: err })
     }
 })
 
@@ -45,36 +39,20 @@ router.get('/', authUser, async (req, res) => {
 *   GET one post
 */
 router.get('/:postId', authUser, async (req, res) => {
-    LOGGER.log("Get one post with id: " + req.params.postId , req)
+    LOGGER.log("Get one post with id: " + req.params.postId, req)
     try {
         const post = await Post.findById(req.params.postId)
-        // Add status Live/Expired to output json
-        post.status = 'Live'
-        if(Date.now() > post.date_expire) {
-            post.status = 'Expired'
-        }
-
-        // Copy post object to result object to add other properties to it
-        // and return it as response body
-        let result = {}
-        Object.assign( result, post._doc)
-        
-        // Get Post activities 
-        const activities = await getPostActivities(req.params.postId)
-        
-        result.like = activities.like
-        result.dislike = activities.dislike
-        result.comments = activities.comments
-        result.activities = activities.activities
-
+    
+        let result = await toPostDTO(post)
+ 
         const minToExpire = calculateMinutesToexpire(result.date_expire)
         result.minutes_to_expire = minToExpire
-        
+
         return res.status(200).send(result)
     } catch (err) {
-        LOGGER.log("ERROR. Get post with id :" + req.params.postId  +
-        ", ERROR: " + err, req)
-        return res.status(409).send({message: "Post by id not found"})
+        LOGGER.log("ERROR. Get post with id :" + req.params.postId +
+            ", ERROR: " + err, req)
+        return res.status(409).send({ message: "Post by id not found" })
     }
 })
 
@@ -83,18 +61,18 @@ const getPostActivities = async (postId) => {
         comments: 0,
         like: 0,
         dislike: 0,
-        activities : []
+        activities: []
     }
-    const postActivities = await Activity.find({post_id: postId})
-    if(postActivities.length > 0) {
+    const postActivities = await Activity.find({ post_id: postId })
+    if (postActivities.length > 0) {
         postActivities.forEach(activity => {
-            if(activity.type == 'comment') {
+            if (activity.type == 'comment') {
                 result.comments += 1
             }
-            if(activity.type == 'like' && activity.body == '1') {
+            if (activity.type == 'like' && activity.body == '1') {
                 result.like += 1
             }
-            if(activity.type == 'like' && activity.body == '0') {
+            if (activity.type == 'like' && activity.body == '0') {
                 result.dislike += 1
             }
         })
@@ -115,9 +93,9 @@ const getPostActivities = async (postId) => {
 */
 router.post('/', authUser, async (req, res) => {
     // Validate post data
-    const {error} = postValidation(req.body)
-    if(error) {
-        return res.status(500).send({message: error['details'][0]['message']})
+    const { error } = postValidation(req.body)
+    if (error) {
+        return res.status(500).send({ message: error['details'][0]['message'] })
     }
 
     const jwtToken = Token(req)
@@ -125,17 +103,17 @@ router.post('/', authUser, async (req, res) => {
 
     // Check if all post categories (topics) exist
     // Must exist to be assigned
-    if(req.body.category.length > 0) {
-        for(let i=0; i< req.body.category.length; i ++){
+    if (req.body.category.length > 0) {
+        for (let i = 0; i < req.body.category.length; i++) {
             let currTopic = req.body.category[i]
-            if(!await checkIfTopicExists(currTopic)){
-                return res.status(409).send({message: "Topic must exist to be assinged {" + currTopic + "}"})
+            if (!await checkIfTopicExists(currTopic)) {
+                return res.status(409).send({ message: "Topic must exist to be assinged {" + currTopic + "}" })
             }
         }
     }
-    
+
     // calculate and set expire time
-    var expireTime = calculateExpirationdate(new Date(), req.body.expiration_time )
+    var expireTime = calculateExpirationdate(new Date(), req.body.expiration_time)
 
     const newPost = new Post({
         title: req.body.title,
@@ -159,25 +137,25 @@ router.post('/', authUser, async (req, res) => {
 */
 router.patch("/:postId", authUser, async (req, res) => {
     const postId = req.params.postId
-    LOGGER.log("Attempt to update post id: PATCH /posts/" + postId , req)
+    LOGGER.log("Attempt to update post id: PATCH /posts/" + postId, req)
     try {
         const post = await Post.findById(postId)
         // Reset expiry time in case of any changes in that value
-        if(req.body.expiration_time) {
-            var expireTime = calculateExpirationdate(post.date_register, 
-                req.body.expiration_time )
+        if (req.body.expiration_time) {
+            var expireTime = calculateExpirationdate(post.date_register,
+                req.body.expiration_time)
             LOGGER.log('Expiration time change. POST id: ' + post._id + ' to: ' +
                 expireTime, req)
             req.body.date_expire = expireTime
         }
-        
+
         Object.assign(post, req.body)
         post.save();
         LOGGER.log('POST updated, id: ' + post._id, req)
         return res.status(200).send(post)
     } catch (err) {
         LOGGER.log("PATCH /posts/" + postId + " error : " + err, req)
-        return res.status(404).send({message: 'Item not found'})
+        return res.status(404).send({ message: 'Item not found' })
     }
 })
 
@@ -186,29 +164,29 @@ router.patch("/:postId", authUser, async (req, res) => {
 */
 router.delete('/:postId', authUser, async (req, res) => {
     const postId = req.params.postId
-    LOGGER.log("Attempt to delete post id: DELETE /posts/" + postId , req)
+    LOGGER.log("Attempt to delete post id: DELETE /posts/" + postId, req)
     const post = await Post.findById(postId);
     // Check if auction exists.
-    
+
     try {
         // Check if user own post or is admin.
-        if(!authOwner(post.owner_id, req)) {
+        if (!authOwner(post.owner_id, req)) {
             LOGGER.log("Unauthorised access: DELETE posts/" + postId, req)
-            return res.status(403).send({message: "Unauthorized access"})
+            return res.status(403).send({ message: "Unauthorized access" })
         }
     } catch (err) {
-        return res.status(403).send({message: "Not found"})
+        return res.status(403).send({ message: "Not found" })
     }
-    
+
     try {
-        post.deleteOne({_id: postId}, () => {
+        post.deleteOne({ _id: postId }, () => {
             LOGGER.log("post deleted: DELETE posts/" + postId, req)
         })
-        
-        return res.status(200).send({message: "post deleted : " + postId})
-    } catch(err) {
+
+        return res.status(200).send({ message: "post deleted : " + postId })
+    } catch (err) {
         LOGGER.log("Error deleting post : DELETE posts/" + postId + ', ERROR: ' + err, req)
-        return res.status(409).send({message: "Error deleting post " + postId})
+        return res.status(409).send({ message: "Error deleting post " + postId })
     }
 })
 
@@ -219,11 +197,42 @@ const calculateExpirationdate = (currentDate, expirationTime) => {
 }
 
 const calculateMinutesToexpire = (expirationTime) => {
-    var timeToexpire =(Math.floor(Date.now() - expirationTime) / 1000)/60
-    timeToexpire =  Math.floor(timeToexpire)
-    if(timeToexpire >=0)
+    var timeToexpire = (Math.floor(Date.now() - expirationTime) / 1000) / 60
+    timeToexpire = Math.floor(timeToexpire)
+    if (timeToexpire >= 0)
         return 0
     return Math.abs(timeToexpire)
+}
+
+const toPostDTO = async (post) => {
+
+    const user = await User.findById(post.owner_id)
+
+    let status = 'Live'
+    if (Date.now() > post.date_expire) {
+        status = 'Expired'
+    }
+
+    const minToExpire = calculateMinutesToexpire(post.date_expire)
+    // Get Post activities 
+    const activities = await getPostActivities(post._id)
+
+    return {
+        _id: post._id,
+        title: post.title,
+        category: post.category,
+        body: post.body,
+        owner_id: post.owner_id,
+        owner_name: user.username,
+        date_register: post.date_register,
+        date_expire: post.date_expire,
+        status: status,
+        minutes_to_expire: minToExpire,
+        like: activities.like,
+        dislike: activities.dislike,
+        comments: activities.comments,
+        activities: activities.activities
+    }
 }
 
 module.exports = router

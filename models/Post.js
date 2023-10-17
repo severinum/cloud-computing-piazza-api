@@ -29,18 +29,10 @@ const postsSchema = mongoose.Schema({
         type: Date,
         default: null
     },
-    status: {
-        type: String,
-        default: 'Live'
-    },
     owner_id: {
         type: String,
         required: true,
         max:256
-    },
-    minutes_to_expire: {
-        type: Number,
-        default: 0
     }
 })
 
