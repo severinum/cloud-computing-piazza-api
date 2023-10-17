@@ -166,7 +166,6 @@ router.delete('/:postId', authUser, async (req, res) => {
     const postId = req.params.postId
     LOGGER.log("Attempt to delete post id: DELETE /posts/" + postId, req)
     const post = await Post.findById(postId);
-    // Check if auction exists.
 
     try {
         // Check if user own post or is admin.

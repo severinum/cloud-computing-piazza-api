@@ -95,7 +95,6 @@ router.delete("/all", authUser, authRole("admin"), async (req, res) => {
 router.delete('/:topicId', authUser, authRole("admin"), async (req, res) => {
     const topicId = req.params.topicId
     LOGGER.log("Attempt to delete topic id: DELETE /topics/" + topicId , req)
-    // Check if auction exists.
     try {
         const topic = await Topic.findById(topicId);
         // Check if user own topic or is admin.

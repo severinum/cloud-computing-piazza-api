@@ -118,15 +118,13 @@ router.post('/login',  async (req, res) => {
 *   Delete user.
 *   Only admin can delete user account.
 *   This is done, soe the account can be deleted only on request
-*   This for the safety in case of unpaid items claims or unfinised auctions and security
-*   Also to avoid spam. User can't creat account and delete it for spam purposes.
 */
 router.delete('/:userId', authUser, authRole("admin"),  async (req, res) => {
     const userId = req.params.userId
     LOGGER.log("Attempt to delete user id: DELETE /users/" + userId , req)
     // Check if user exists.
     try {
-        const auction = await User.findById(userId);
+        const user = await User.findById(userId);
     } catch (err) {
         return res.status(403).send({message: "Not found"})
     }

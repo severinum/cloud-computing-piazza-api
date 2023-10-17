@@ -14,6 +14,7 @@ const {activityValidation} = require('../validators/validation');
 
 const Post = require('../models/Post')
 const Activity = require('../models/Activity')
+const User = require('../models/User')
 
 
 /* 
@@ -22,12 +23,68 @@ const Activity = require('../models/Activity')
 router.get('/', authUser, async (req, res) => {
     LOGGER.log("Get all activities", req)
     try {
-        const activities = await Post.find()
+        const activities = await Activity.find()
         return res.status(200).send(activities)
     } catch (err) {
         return res.status(409).send({message:err})
     }
 })
+
+
+/* 
+*   GET one activity
+*/
+router.get('/:activityId', authUser, async (req, res) => {
+    LOGGER.log("Get one activity with id: " + req.params.activityId, req)
+    try {
+        const activity = await Activity.findById(req.params.activityId)
+        let result = await toActivityDTO(activity)
+        return res.status(200).send(result)
+    } catch (err) {
+        LOGGER.log("ERROR. Get activity with id :" + req.params.activityId +
+            ", ERROR: " + err, req)
+        return res.status(409).send({ message: "activity by id not found" })
+    }
+})
+
+/* 
+*   DELETE activity
+*/
+router.delete('/:activityId', authUser, async (req, res) => {
+    const activityId = req.params.activityId
+    LOGGER.log("Attempt to deleteactivity id: DELETE /activity/" + activityId, req)
+    let activity = null;
+    try {
+    activity = await Activity.findById(activityId);
+    } catch (err) {
+        const errMsg = "Error. Find activity , id: " + activityId + ", error: " + err
+        LOGGER.log(errMsg, req)
+            return res.status(409).send({ message: "Error. Activity not found" })
+    }
+
+    try {
+        // Check if user own activity or is admin.
+        if (!authOwner(activity.owner_id, req)) {
+            LOGGER.log("Unauthorised access: DELETE activity/" + activityId, req)
+            return res.status(403).send({ message: "Unauthorized access" })
+        }
+    } catch (err) {
+        LOGGER.log("Error. Find activity , id: " + activityId + ", error: " + err, req)
+        return res.status(403).send({ message: "Not found" })
+    }
+
+    try {
+        activity.deleteOne({ _id: activityId }, () => {
+            LOGGER.log("Activity deleted: DELETE activity/" + activityId, req)
+        })
+
+        return res.status(200).send({ message: "Activity deleted : " + activityId })
+    } catch (err) {
+        LOGGER.log("Error deleting activity : DELETE activity/" + activityId + ', ERROR: ' + err, req)
+        return res.status(409).send({ message: "Error deleting activity " + activityId })
+    }
+})
+
 
 /* 
 *   POST. Add activity
@@ -108,5 +165,21 @@ const validateActivityInputs = (type, body) => {
     }
     return true
 }
+
+const toActivityDTO = async (activity) => {
+
+    const user = await User.findById(activity.owner_id)
+
+    return {
+        _id: activity._id,
+        post_id: activity.post_id,
+        owner_id: activity.owner_id,
+        owner_name: user.username,
+        type: activity.type,
+        body: activity.body,
+        date: activity.date
+    }
+}
+
 
 module.exports = router
