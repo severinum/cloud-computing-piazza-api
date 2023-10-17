@@ -55,6 +55,32 @@ router.get('/:postId', authUser, async (req, res) => {
     }
 })
 
+/* 
+*   GET posts by topic
+*/
+router.get('/topic/:topicName', authUser, async (req, res) => {
+    const topicName = req.params.topicName
+    LOGGER.log("Get posts by topic: " + topicName, req)
+    try {
+        const posts = await Post.find()
+    
+        let result = []
+        for (const post of posts) {
+            for (const category of post.category){
+                if(category === topicName) {
+                    result.push(await toPostDTO(post))
+                }
+            }          
+        }
+
+        return res.status(200).send(result)
+    } catch (err) {
+        LOGGER.log("ERROR. Get post with id :" + req.params.postId +
+            ", ERROR: " + err, req)
+        return res.status(409).send({ message: "Can't read posts" })
+    }
+})
+
 const getPostActivities = async (postId) => {
     let result = {
         comments: 0,
@@ -219,7 +245,7 @@ const calculateMinutesToexpire = (expirationTime) => {
 }
 
 const toPostDTO = async (post) => {
-
+    console.log(post)
     const user = await User.findById(post.owner_id)
 
     let status = 'Live'
