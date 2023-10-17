@@ -37,6 +37,10 @@ const postsSchema = mongoose.Schema({
         type: String,
         required: true,
         max:256
+    },
+    minutes_to_expire: {
+        type: Number,
+        default: 0
     }
 })
 

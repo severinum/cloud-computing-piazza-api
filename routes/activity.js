@@ -15,6 +15,20 @@ const {activityValidation} = require('../validators/validation');
 const Post = require('../models/Post')
 const Activity = require('../models/Activity')
 
+
+/* 
+*   GET All activities
+*/
+router.get('/', authUser, async (req, res) => {
+    LOGGER.log("Get all activities", req)
+    try {
+        const activities = await Post.find()
+        return res.status(200).send(activities)
+    } catch (err) {
+        return res.status(409).send({message:err})
+    }
+})
+
 /* 
 *   POST. Add activity
 *   Example JSON payload:

@@ -26,6 +26,9 @@ router.get('/', authUser, async (req, res) => {
             post.status = 'Live'
             if(Date.now() > post.date_expire) {
                 post.status = 'Expired'
+            } else {
+                const minToExpire = calculateMinutesToexpire(post.date_expire)
+                post.minutes_to_expire = minToExpire
             }
             // TODO: get likes and comments and attach them to post
             // maybe do it in external mentod, so it can be reused in GET ONE POST req.
@@ -33,6 +36,7 @@ router.get('/', authUser, async (req, res) => {
         })
         return res.status(200).send(posts)
     } catch (err) {
+        LOGGER("ERROR: Get all posts, ERROR:  "+ err, req)
         return res.status(409).send({message:err})
     }
 })
@@ -62,6 +66,9 @@ router.get('/:postId', authUser, async (req, res) => {
         result.dislike = activities.dislike
         result.comments = activities.comments
         result.activities = activities.activities
+
+        const minToExpire = calculateMinutesToexpire(result.date_expire)
+        result.minutes_to_expire = minToExpire
         
         return res.status(200).send(result)
     } catch (err) {
@@ -209,6 +216,14 @@ router.delete('/:postId', authUser, async (req, res) => {
 const calculateExpirationdate = (currentDate, expirationTime) => {
     var expireTime = new Date();
     return expireTime.setTime(currentDate.getTime() + (expirationTime * 60 * 1000));
+}
+
+const calculateMinutesToexpire = (expirationTime) => {
+    var timeToexpire =(Math.floor(Date.now() - expirationTime) / 1000)/60
+    timeToexpire =  Math.floor(timeToexpire)
+    if(timeToexpire >=0)
+        return 0
+    return Math.abs(timeToexpire)
 }
 
 module.exports = router
