@@ -27,7 +27,6 @@ router.get('/', authUser, async (req, res) => {
         for (const post of posts) {
             result.push(await toPostDTO(post))
         }
-
         return res.status(200).send(result)
     } catch (err) {
         LOGGER("ERROR: Get all posts, ERROR:  " + err, req)
@@ -157,6 +156,22 @@ router.patch("/:postId", authUser, async (req, res) => {
         LOGGER.log("PATCH /posts/" + postId + " error : " + err, req)
         return res.status(404).send({ message: 'Item not found' })
     }
+})
+
+/* 
+*   DELETE All posts
+*/
+router.delete("/all", authUser, authRole("admin"), async (req, res) => {
+    LOGGER.log("Deleting all posts", req)
+    try {
+        Post.deleteMany({}, () => {
+            console.log('All posts were deleted')
+        })
+    } catch(err) {
+        LOGGER.log("ERROR. Can't delete all posts. ERROR: " + err , req)
+        return res.status(404).send({message: "Can't delete all posts."})
+    }
+    res.status(200).send({message: "All posts deleted"})
 })
 
 /* 

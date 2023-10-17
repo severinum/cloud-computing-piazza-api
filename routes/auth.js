@@ -113,6 +113,21 @@ router.post('/login',  async (req, res) => {
 
 });
 
+/* 
+*   DELETE All users
+*/
+router.delete("/all", authUser, authRole("admin"), async (req, res) => {
+    LOGGER.log("Deleting all users", req)
+    try {
+        User.deleteMany({}, () => {
+            console.log('All users were deleted')
+        })
+    } catch(err) {
+        LOGGER.log("ERROR. Can't delete all users. ERROR: " + err , req)
+        return res.status(404).send({message: "Can't delete all users"})
+    }
+    res.status(200).send({message: "All users deleted"})
+})
 
 /* 
 *   Delete user.
@@ -244,6 +259,8 @@ router.patch("/:userId", authUser, authRole('admin'), async (req, res) => {
         return res.status(404).send({message: 'User not found'})
     }
 })
+
+
 
 
 module.exports = router;
