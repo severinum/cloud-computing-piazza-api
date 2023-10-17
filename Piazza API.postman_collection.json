@@ -1,0 +1,668 @@
+{
+	"info": {
+		"_postman_id": "ddd657a1-90e8-4152-b514-6aee8e1a6d52",
+		"name": "Piazza API",
+		"description": "REST API for Piazza Coursework - Birkbeck, Cloud Computing module, 2023\n\nstudent name: Seweryn Michota  \nstudent ID: smicho01  \nstudent number: t12806649",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11729080",
+		"_collection_link": "https://speeding-water-207383.postman.co/workspace/CLOUD-COMPUTING-2023~64a2588c-d0c4-4a39-a6e3-824830e70c6c/collection/11729080-ddd657a1-90e8-4152-b514-6aee8e1a6d52?action=share&source=collection_link&creator=11729080"
+	},
+	"item": [
+		{
+			"name": "Topics",
+			"item": [
+				{
+					"name": "Get all topics",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/topics",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"topics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get topic by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/topics/652bd6dd66e49aa024afdcb1",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"topics",
+								"652bd6dd66e49aa024afdcb1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add topic",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"tech\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/topics",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"topics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete ONE topic",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/topics/652be3802ecd217e53f24d6f",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"topics",
+								"652be3802ecd217e53f24d6f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete ALL topics",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/topics/all",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"topics",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Administrator\",\r\n    \"email\" :\"admin@test.com\",\r\n    \"password\" : \"pa$$word123\",\r\n    \"roles\": [\"admin\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/users/register",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Super Admin\",\r\n    \"email\" :\"admin@test.com\",\r\n    \"password\" : \"admin123$\",\r\n    \"roles\": [\"admin\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/users",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login ADMIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"TOKEN\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" :\"admin@test.com\",\r\n    \"password\" : \"pa$$word123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/users/login",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login USER",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"pm.environment.set(\"TOKEN\", jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" :\"admin@test.com\",\r\n    \"password\" : \"pa$$word123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/users/login",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE user",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Super Admin\",\r\n    \"email\" :\"admin@test.com\",\r\n    \"password\" : \"admin123$\",\r\n    \"roles\": [\"admin\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/users/652bcf5082e969d0abc1522e",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"users",
+								"652bcf5082e969d0abc1522e"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Posts",
+			"item": [
+				{
+					"name": "GET All posts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/posts",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET one post",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/posts/652d5bd420c3381ecdca3701",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"posts",
+								"652d5bd420c3381ecdca3701"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add NEW post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Kittens are cool\",\r\n    \"category\": [\"sport\", \"tech\"],\r\n    \"body\" : \"Lorem ipsum ...\",\r\n    \"expiration_time\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/posts",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update post",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"meow\",\r\n    \"category\": [\"sport\", \"tech\"],\r\n    \"body\" : \"Lorem ipsum ...\",\r\n    \"expiration_time\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/posts/652d05e1ebf7ee3e793c2692",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"posts",
+								"652d05e1ebf7ee3e793c2692"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete ONE post",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/posts/652d06da93b8d0959788b82b",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"posts",
+								"652d06da93b8d0959788b82b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Activity",
+			"item": [
+				{
+					"name": "Add NEW activity",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"post_id\": \"652d5bd420c3381ecdca3701\",\r\n        \"type\": \"comment\",\r\n        \"body\" : \"Lorem ipsum ...\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/activity",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"activity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET All activities",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/activity",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"activity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET one activity",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/activity/652da699a3e8fc896c9f9593",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"activity",
+								"652da699a3e8fc896c9f9593"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE one activity",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/activity/652da699a3e8fc896c9f9593",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"activity",
+								"652da699a3e8fc896c9f9593"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Healthcheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/healthcheck",
+					"protocol": "http",
+					"host": [
+						"{{API_HOST}}"
+					],
+					"port": "{{API_PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"healthcheck"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
