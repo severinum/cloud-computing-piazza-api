@@ -166,14 +166,17 @@ router.patch("/:postId", authUser, async (req, res) => {
     try {
         const post = await Post.findById(postId)
         // Reset expiry time in case of any changes in that value
-        if (req.body.expiration_time) {
+        if (req.body.expiration_time != null) {
+            console.log("OLD POST EXPIRE DATE: " + req.body.date_expire)
             var expireTime = calculateExpirationdate(post.date_register,
                 req.body.expiration_time)
             LOGGER.log('Expiration time change. POST id: ' + post._id + ' to: ' +
                 expireTime, req)
             req.body.date_expire = expireTime
+            console.log("NEW POST EXPIRE DATE: " + req.body.date_expire)
         }
-
+        
+        
         Object.assign(post, req.body)
         post.save();
         LOGGER.log('POST updated, id: ' + post._id, req)
@@ -191,7 +194,7 @@ router.delete("/all", authUser, authRole("admin"), async (req, res) => {
     LOGGER.log("Deleting all posts", req)
     try {
         Post.deleteMany({}, () => {
-            console.log('All posts were deleted')
+            LOGGER.log('All posts were deleted', req)
         })
     } catch(err) {
         LOGGER.log("ERROR. Can't delete all posts. ERROR: " + err , req)
@@ -245,7 +248,6 @@ const calculateMinutesToexpire = (expirationTime) => {
 }
 
 const toPostDTO = async (post) => {
-    console.log(post)
     const user = await User.findById(post.owner_id)
 
     let status = 'Live'

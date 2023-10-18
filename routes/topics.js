@@ -84,7 +84,7 @@ router.post('/', authUser, authRole("admin"),  async (req, res) => {
 router.delete("/all", authUser, authRole("admin"), async (req, res) => {
     LOGGER.log("Deleting all topics", req)
     Topic.deleteMany({}, () => {
-        console.log('All topics were deleted')
+        LOGGER.log('All topics were deleted', req)
     })
     res.status(200).send({message: "All topics deleted"})
 })

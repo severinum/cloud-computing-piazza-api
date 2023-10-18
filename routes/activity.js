@@ -107,6 +107,21 @@ router.get('/:activityId', authUser, async (req, res) => {
 })
 
 
+/* 
+*   DELETE All activities
+*/
+router.delete("/all", authUser, authRole("admin"), async (req, res) => {
+    LOGGER.log("Deleting all activities", req)
+    try {
+        Activity.deleteMany({}, () => {
+            LOGGER.log("All activities deleted", req)
+        })
+    } catch(err) {
+        LOGGER.log("ERROR. Can't delete all activities. ERROR: " + err , req)
+        return res.status(404).send({message: "Can't delete all activities."})
+    }
+    res.status(200).send({message: "All posts deleted"})
+})
 
 /* 
 *   DELETE activity
@@ -192,7 +207,7 @@ router.post('/', authUser, async (req, res) => {
     // Prevent post owner adding own activities
     if(post.owner_id == loggedInUserId) {
         LOGGER.log("ERROR. Can't add activities on own posts" , req)
-        return res.status(409).send({message: "Can't add activities to won posts"})
+        return res.status(409).send({message: "Can't add activities to own posts"})
     }
 
     // Validate if type is valid [like or comment]

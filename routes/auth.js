@@ -120,7 +120,7 @@ router.delete("/all", authUser, authRole("admin"), async (req, res) => {
     LOGGER.log("Deleting all users", req)
     try {
         User.deleteMany({}, () => {
-            console.log('All users were deleted')
+            LOGGER.log('All users were deleted',req)
         })
     } catch(err) {
         LOGGER.log("ERROR. Can't delete all users. ERROR: " + err , req)
