@@ -30,6 +30,65 @@ router.get('/', authUser, async (req, res) => {
     }
 })
 
+/* 
+*   GET All likes
+*/
+router.get('/likes', authUser, async (req, res) => {
+    LOGGER.log("Get all LIKE activities", req)
+    try {
+        const activities = await Activity.find()
+        let result = []
+        for(const activity of activities) {
+            if (activity.type == 'like' && activity.body == '1'){
+                result.push(activity)
+            }
+        }
+
+        return res.status(200).send(result)
+    } catch (err) {
+        return res.status(409).send({message:err})
+    }
+})
+
+/* 
+*   GET All dislikes
+*/
+router.get('/dislikes', authUser, async (req, res) => {
+    LOGGER.log("Get all LIKE activities", req)
+    try {
+        const activities = await Activity.find()
+        let result = []
+        for(const activity of activities) {
+            if (activity.type == 'like' && activity.body == '0'){
+                result.push(activity)
+            }
+        }
+
+        return res.status(200).send(result)
+    } catch (err) {
+        return res.status(409).send({message:err})
+    }
+})
+
+/* 
+*   GET All dislikes
+*/
+router.get('/comments', authUser, async (req, res) => {
+    LOGGER.log("Get all LIKE activities", req)
+    try {
+        const activities = await Activity.find()
+        let result = []
+        for(const activity of activities) {
+            if (activity.type == 'comment'){
+                result.push(activity)
+            }
+        }
+
+        return res.status(200).send(result)
+    } catch (err) {
+        return res.status(409).send({message:err})
+    }
+})
 
 /* 
 *   GET one activity
@@ -46,6 +105,8 @@ router.get('/:activityId', authUser, async (req, res) => {
         return res.status(409).send({ message: "activity by id not found" })
     }
 })
+
+
 
 /* 
 *   DELETE activity
