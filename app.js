@@ -47,5 +47,6 @@ app.get('/api/v1/healthcheck', (req, res) => {
 })
 
 app.listen(process.env.PORT, () => {
+    console.log("CLOUD COMPUTING COURSEWORK 2023. Author: Seweryn Michota")
     console.log("Piazza API status: ON")
 })

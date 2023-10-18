@@ -164,13 +164,61 @@
 			"name": "Auth",
 			"item": [
 				{
+					"name": "Test user logins",
+					"item": [
+						{
+							"name": "Login NESTOR",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);\r",
+											"pm.environment.set(\"TOKEN\", jsonData.token);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\" :\"nestor@contoso.com\",\r\n    \"password\" : \"nestorPa$$123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/users/login",
+									"protocol": "http",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"api",
+										"{{API_VERSION}}",
+										"users",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "Register user",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"Administrator\",\r\n    \"email\" :\"admin@test.com\",\r\n    \"password\" : \"pa$$word123\",\r\n    \"roles\": [\"admin\"]\r\n}",
+							"raw": "{\r\n    \"username\": \"AdministratorX\",\r\n    \"email\" :\"admin@test.com\",\r\n    \"password\" : \"pa$$word123\",\r\n    \"roles\": [\"admin\"]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -355,6 +403,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "DELETE all users",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/users/all",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"users",
+								"all"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -417,6 +493,64 @@
 					"response": []
 				},
 				{
+					"name": "GET posts by topic name",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/posts/topic/tech",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"posts",
+								"topic",
+								"tech"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET top post in topic",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/posts/top/tech",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"posts",
+								"top",
+								"tech"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Add NEW post",
 					"request": {
 						"method": "POST",
@@ -429,7 +563,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"title\": \"Kittens are cool\",\r\n    \"category\": [\"sport\", \"tech\"],\r\n    \"body\" : \"Lorem ipsum ...\",\r\n    \"expiration_time\": 5\r\n}",
+							"raw": "{\r\n    \"title\": \"Kittens are cool\",\r\n    \"category\": [\"tech\"],\r\n    \"body\" : \"Lorem ipsum ...\",\r\n    \"expiration_time\": 5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -535,7 +669,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n        \"post_id\": \"652d5bd420c3381ecdca3701\",\r\n        \"type\": \"comment\",\r\n        \"body\" : \"Lorem ipsum ...\"\r\n    }",
+							"raw": "{\r\n        \"post_id\": \"652ebbe2bc8b42a59542d732\",\r\n        \"type\": \"comment\",\r\n        \"body\" : \"Lorem ipsum ...\"\r\n    }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -614,6 +748,90 @@
 					"response": []
 				},
 				{
+					"name": "GET all LIKES",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/activity/likes",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"activity",
+								"likes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all DISLIKES",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/activity/dislikes",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"activity",
+								"dislikes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET all COMMENTS",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/activity/comments",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"activity",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "DELETE one activity",
 					"request": {
 						"method": "DELETE",
@@ -636,6 +854,34 @@
 								"{{API_VERSION}}",
 								"activity",
 								"652da699a3e8fc896c9f9593"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE all activities",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/activity/all",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"activity",
+								"all"
 							]
 						}
 					},

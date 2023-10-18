@@ -1,0 +1,9 @@
+## Building Docker image
+docker build -t sever3d/piazza-api .
+
+## Run image
+docker run -p 3000:3000 -d sever3d/piazza-api
+
+## Push image to Docker Hub
+docker push sever3d/piazza-api:latest
+
