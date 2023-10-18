@@ -81,6 +81,54 @@ router.get('/topic/:topicName', authUser, async (req, res) => {
     }
 })
 
+/* 
+*   GET top post(s) for a given topic
+*/
+router.get('/top/:topicName', authUser, async (req, res) => {
+    const topicName = req.params.topicName
+    LOGGER.log("Get top post in topic: " + topicName, req)
+    try {
+        const posts = await Post.find()
+
+        if(posts.length == 0){
+            return res.status(200).send({ message: "No posts found" })
+        }
+
+        let result = []
+
+        // Get Active post in topic
+        for (const post of posts) {
+            for (const category of post.category){
+                if (category === topicName && Date.now() < post.date_expire) {
+                    result.push(await toPostDTO(post))
+                }
+            }          
+        }
+
+        // Find top comments
+        // Return all if just one post
+        if(result.length == 1){
+            return res.status(200).send(result)
+        }
+
+        // If more than 1, get the top comment
+        let topComment = result[0]
+        let topSumOfLikeAndDislike = parseInt(topComment['like']) + parseInt(topComment['dislike'])
+        for(let i=1; i< result.length; i++) {
+            let currSumOfLikesAndDislakes =  parseInt(result[i]['like']) + parseInt(result[i]['dislike'])
+            if(currSumOfLikesAndDislakes > topSumOfLikeAndDislike) {
+                topComment = result[i]
+            }
+        }
+
+        return res.status(200).send(topComment)
+    } catch (err) {
+        LOGGER.log("ERROR. Get post with id :" + req.params.postId +
+            ", ERROR: " + err, req)
+        return res.status(409).send({ message: "Can't read posts" })
+    }
+})
+
 const getPostActivities = async (postId) => {
     let result = {
         comments: 0,
