@@ -82,6 +82,32 @@ router.get('/topic/:topicName', authUser, async (req, res) => {
 })
 
 /* 
+*   GET expired posts by topic
+*/
+router.get('/expired/:topicName', authUser, async (req, res) => {
+    const topicName = req.params.topicName
+    LOGGER.log("Get posts by topic: " + topicName, req)
+    try {
+        const posts = await Post.find()
+    
+        let result = []
+        for (const post of posts) {
+            for (const category of post.category){
+                if(category === topicName && post.date_expire <= Date.now()) {
+                    result.push(await toPostDTO(post))
+                }
+            }          
+        }
+
+        return res.status(200).send(result)
+    } catch (err) {
+        LOGGER.log("ERROR. Get post with id :" + req.params.postId +
+            ", ERROR: " + err, req)
+        return res.status(409).send({ message: "Can't read posts" })
+    }
+})
+
+/* 
 *   GET top post(s) for a given topic
 */
 router.get('/top/:topicName', authUser, async (req, res) => {
