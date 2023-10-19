@@ -551,6 +551,35 @@
 					"response": []
 				},
 				{
+					"name": "GET expired posts per topic",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/posts/expired/tech",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"posts",
+								"expired",
+								"tech"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Add NEW post",
 					"request": {
 						"method": "POST",
