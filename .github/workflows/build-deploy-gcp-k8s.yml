@@ -34,5 +34,5 @@ jobs:
             GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
           run: |
             gcloud container clusters get-credentials cloud-computing-cluster --region us-central1
-            sed -i "s/"GOOGLE_PROJECT_ID/$GOOGLE_PROJECT_ID/d" resources.yml
+            sed -i "s/GOOGLE_PROJECT_ID/$GOOGLE_PROJECT_ID/d" resources.yml
             kubectl apply -f resources.yml
