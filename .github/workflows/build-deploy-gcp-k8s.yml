@@ -1,0 +1,38 @@
+---
+name: Build and Push Image to Google Cloud Platform
+on:
+    push:
+        branches: [ main ]
+
+jobs:
+    build-push-google-cloud:
+        name: Build and Push Google Artifact Registry
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+
+        - name: Install the gcloud cli
+          uses: google-github-actions/setup-gcloud@v0
+          with:
+            service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+            project_id: ${{ secrets.GOOGLE_PROJECT_ID }}
+            install_components: 'gke-gcloud-auth-plugin'
+            export_default_credentials: true
+        
+        - name: Build and Push the Docker Image
+          env:
+            GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+          run: | 
+            gcloud auth configure-docker us-east1-docker.pkg.dev
+            docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest .
+            docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest
+        
+        - name: Deploy to GKE
+          env: 
+            GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+          run: |
+            gcloud container get-credentials cloud-computing-cluster --region us-central1
+            sed -i "s/"GOOGLE_PROJECT_ID/$GOOGLE_PROJECT_ID/d" resources.yml
+            kubectl apply -f resources.yml
