@@ -40,5 +40,6 @@ jobs:
             echo $TOKEN_SECRET_STRING
             gcloud container clusters get-credentials cloud-computing-cluster --region us-central1
             sed -i "s/GOOGLE_PROJECT_ID/$GOOGLE_PROJECT_ID/g" resources.yml
-            sed -i "s/MURL_STRING/$MURL_STRING/g" resources.yml
+            # sed -i "s/MURL_STRING/$MURL_STRING/g" resources.yml
+            sed -i "s/TOKEN_SECRET_STRING/$TOKEN_SECRET_STRING/g" resources.yml
             kubectl apply -f resources.yml
