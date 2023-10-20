@@ -18,7 +18,7 @@ metadata:
   labels:
     app: piazza-api
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: piazza-api
@@ -30,3 +30,12 @@ spec:
       containers:
       - name: piazza-api
         image:  us-east1-docker.pkg.dev/GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "150m"
+      restartPolicy: Always
+
