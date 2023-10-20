@@ -1,8 +1,8 @@
 name: Publish Docker image Multiarch
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [main]
 
 jobs:
   push_to_registry:
