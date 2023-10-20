@@ -33,7 +33,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: MURL
-          value: MURL_STRING
+          value: MONGO_CONN_STRING
         - name: TOKEN_SECRET
           value: TOKEN_SECRET_STRING
         resources:
