@@ -1,5 +1,14 @@
 ---
 apiVersion: v1
+kind: Secret
+metadata:
+  name: piazza-credentials
+type: Opaque
+data:
+  MURL: bW9uZ29kYitzcnY6Ly9zdHVkZW50OiR0dWRlbnQxMjNAbW9qY2x1c3Rlci5jaDdidS5tb25nb2RiLm5ldC9QaWF6emFEZXY/cmV0cnlXcml0ZXM9dHJ1ZSZ3PW1ham9yaXR5
+  TOKEN_SECRET: SUN0eEdWP1NIMVdeMFFmeEpjemo0UXc4VHJ4ZHRQZzh5N1R2VnFzJDFIbm5KRk56NkdMX3FfTXRTOA==
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: piazza-api
@@ -31,6 +40,17 @@ spec:
       - name: piazza-api
         image:  us-east1-docker.pkg.dev/GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest
         imagePullPolicy: Always
+        env:
+        - name: MURL
+          valueFrom:
+            secretKeyRef:
+              name: piazza-credentials
+              key: MURL
+        - name: TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: piazza-credentials
+              key: TOKEN_SECRET
         resources:
           requests:
             memory: "256Mi"
