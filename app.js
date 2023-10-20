@@ -35,7 +35,6 @@ app.use('/api/v1/topics', topicsRoute)
 MURL = process.env.MURL
 mongoose.set('strictQuery', false)
 mongoose.connect(MURL, () => {
-    console.log('MURL: ', MURL)
     console.log('MongoDB connection: Successful')
 })
 
