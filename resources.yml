@@ -33,7 +33,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: MURL
-          value: mongodb+srv://student:Student123@mojcluster.ch7bu.mongodb.net/PiazzaDev?retryWrites=true&w=majority
+          value: mongodb+srv://MONGO_USER:MONGO_PASSWORD@MONGO_CLUSTER/MONGO_COLLECTION?retryWrites=true&w=majority
         - name: TOKEN_SECRET
           value: TOKEN_SECRET_STRING
         resources:
