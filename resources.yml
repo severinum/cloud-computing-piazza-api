@@ -32,7 +32,7 @@ spec:
         image:  us-east1-docker.pkg.dev/GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest
         resources:
           requests:
-            memory: "64Mi"
+            memory: "256Mi"
             cpu: "250m"
           limits:
             memory: "600Mi"
