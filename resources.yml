@@ -30,6 +30,7 @@ spec:
       containers:
       - name: piazza-api
         image:  us-east1-docker.pkg.dev/GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest
+        imagePullPolicy: Always
         resources:
           requests:
             memory: "256Mi"
