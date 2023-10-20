@@ -13,7 +13,7 @@ jobs:
     
     steps:
       - name: Tag
-        uses: K-Phoen/semver-release-action@master
+        uses: K-Phoen/semver-release-action@v1.2.0
         with:
           release_branch: main
         env:
