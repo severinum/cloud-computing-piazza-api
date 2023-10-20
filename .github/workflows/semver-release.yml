@@ -1,20 +1,9 @@
 # .github/workflows/release.yml
-name: Release
-
+name: 'SemVer Tag'
 on:
   pull_request:
-    types: [closed]
+    types: [ closed ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    if: github.event.pull_request.merged
-    
-    steps:
-      - name: Tag
-        uses: K-Phoen/semver-release-action@v1.2.0
-        with:
-          release_branch: main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  check:
+    uses: UKHomeOffice/sas-github-workflows/.github/workflows/semver-tag.yml@v2
