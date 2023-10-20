@@ -33,9 +33,9 @@ spec:
         resources:
           requests:
             memory: "64Mi"
-            cpu: "100m"
+            cpu: "250m"
           limits:
-            memory: "128Mi"
-            cpu: "150m"
+            memory: "600Mi"
+            cpu: "500m"
       restartPolicy: Always
 
