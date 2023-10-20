@@ -32,7 +32,11 @@ jobs:
         - name: Deploy to GKE
           env: 
             GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+            MURL_STRING_BASE64: ${{ secrets.MURL_STRING_BASE64 }}
+            TOKEN_SECRET_STRING_BASE64: ${{ secrets.TOKEN_SECRET_STRING_BASE64 }}
           run: |
             gcloud container clusters get-credentials cloud-computing-cluster --region us-central1
             sed -i "s/GOOGLE_PROJECT_ID/$GOOGLE_PROJECT_ID/g" resources.yml
+            sed -i "s/MURL_STRING_BASE64/$MURL_STRING_BASE64/g" resources.yml
+            sed -i "s/TOKEN_SECRET_STRING_BASE64/$TOKEN_SECRET_STRING_BASE64/g" resources.yml
             kubectl apply -f resources.yml
