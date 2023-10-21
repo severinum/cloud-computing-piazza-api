@@ -35,6 +35,8 @@ jobs:
           env:
             GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
           run: | 
+            echo "Ala ma kota"
+            echo $RELEASE_VERSION
             gcloud auth configure-docker us-east1-docker.pkg.dev
             docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest .
             docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:$RELEASE_VERSION .
