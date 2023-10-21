@@ -21,13 +21,26 @@ jobs:
             install_components: 'gke-gcloud-auth-plugin'
             export_default_credentials: true
 
+        - name: Set output
+          id: vars
+          run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+        - name: Check output
+          env:  
+            RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+          run: |
+            echo $RELEASE_VERSION
+            echo ${{ steps.vars.outputs.tag }}
+
         - name: Build and Push the Docker Image
           env:
             GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
           run: | 
             gcloud auth configure-docker us-east1-docker.pkg.dev
             docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest .
+            docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:$RELEASE_VERSION .
             docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest
+            docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:$RELEASE_VERSION
+            
         
         - name: Deploy to GKE
           env: 
