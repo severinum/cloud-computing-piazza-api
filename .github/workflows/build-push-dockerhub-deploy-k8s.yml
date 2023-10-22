@@ -4,6 +4,7 @@ on:
   pull_request:
     types: [ closed ]
 
+    
 jobs:
   semver:
     uses: UKHomeOffice/sas-github-workflows/.github/workflows/semver-tag.yml@v2
