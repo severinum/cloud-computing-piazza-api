@@ -24,6 +24,30 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
+
+
+
+
+      - name: Parse the SemVer label
+        id: label
+        uses: UKHomeOffice/match-label-action@v1
+        with:
+          labels: minor,major,patch
+          mode: singular
+  
+      - name: Calculate SemVer value
+        id: calculate
+        uses: UKHomeOffice/semver-calculate-action@v1
+        with:
+          increment: ${{ steps.label.outputs.matchedLabels }}
+          github_token:  ${{ secrets.GITHUB_TOKEN }}
+          default_to_highest: true
+
+
+      - name : Drukuj
+        run: |
+          echo ${{ steps.calculate.outputs.version }}     
       
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
