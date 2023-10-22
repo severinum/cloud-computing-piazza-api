@@ -218,7 +218,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"AdministratorX\",\r\n    \"email\" :\"admin@test.com\",\r\n    \"password\" : \"pa$$word123\",\r\n    \"roles\": [\"admin\"]\r\n}",
+							"raw": "{\r\n    \"username\": \"Admin\",\r\n    \"email\" :\"admin@test.com\",\r\n    \"password\" : \"pa$$word123\",\r\n    \"roles\": [\"admin\"]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -276,6 +276,46 @@
 								"api",
 								"{{API_VERSION}}",
 								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET one user",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"Super Admin\",\r\n    \"email\" :\"admin@test.com\",\r\n    \"password\" : \"admin123$\",\r\n    \"roles\": [\"admin\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{API_HOST}}:{{API_PORT}}/api/{{API_VERSION}}/users/6533b59cba0d5d0e6b54a021",
+							"protocol": "http",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"users",
+								"6533b59cba0d5d0e6b54a021"
 							]
 						}
 					},

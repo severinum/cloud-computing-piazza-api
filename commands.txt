@@ -1,9 +1,69 @@
-## Building Docker image
+Commands used to deploy application manually
+
+Author: Seweryn Michota
+
+###################### Install NPM on Ubuntu VM
+
+$ sudo apt update 
+$ sudo apt install nodejs npm
+
+App require Node v18 to run. If lower version installed. Instann 'n'
+$ npm install -g n
+Then select Node version 18 with command
+$ sudo n 18
+
+###################### Install Docker on Ubuntu VM
+
+$ sudo apt-get update
+
+$ sudo apt-get install ca-certificates curl gnupg
+
+$ sudo install -m 0755 -d /etc/apt/keyrings
+
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+$ sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+$ echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+$ sudo apt-get update
+
+$ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+######################  Create Docker sudo user
+sudo adduser docker-user
+
+sudo usermod -aG sudo docker-user
+
+sudo usermod -aG docker docker-user
+
+su - docker-user
+
+###################### Clone Piazza repository and run the API manually
+$ git clone git@github.com:severinum/cloud-computing-piazza-api.git
+$ cd cloud-computing-piazza-api
+$ npm install
+
+After installastion create/update files .env and .env.local by adding environment variables and their apropriate values (mentioned in the project report). 
+PORT
+MURL
+TOKEN_SECRET
+TOKEN_EXPIRY_TIME
+
+Run API with command:
+$ npm start
+
+
+
+###################### Build Docker image for PIAZZA API. 'latest' tag will be added automatically
 docker build -t sever3d/piazza-api .
 
-## Run image
+###################### Run image
 docker run -p 3000:3000 -d sever3d/piazza-api
 
-## Push image to Docker Hub
+###################### Push image to Docker Hub
 docker push sever3d/piazza-api:latest
 
