@@ -67,7 +67,7 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: sever3d/piazza-api:lates,sever3d/piazza-api:${{ steps.calculate.outputs.version }} 
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
