@@ -160,7 +160,7 @@ router.delete('/:userId', authUser, authRole("admin"),  async (req, res) => {
 /* 
 *   GET All Users
 */
-router.get('/', authUser, async (req, res) => {
+router.get('/', authRole('admin'), async (req, res) => {
     try {
         const users = await User.find()
         return res.status(200).send(users)
@@ -172,7 +172,7 @@ router.get('/', authUser, async (req, res) => {
 /* 
 *   GET one user
 */
-router.get('/:userId', authUser, async (req, res) => {
+router.get('/:userId', authRole('admin'), async (req, res) => {
     LOGGER.log("Get one user with id: " + req.params.userId, req)
     try {
         const user = await User.findById(req.params.userId)
