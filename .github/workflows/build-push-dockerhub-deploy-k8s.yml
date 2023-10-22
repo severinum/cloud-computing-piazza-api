@@ -1,8 +1,14 @@
 name: Publish DockerHub deploy GCP K8S
 
 on:
+  push:
+    branches:
+      - 'master'
+    tags:
+      - 'v*'
   pull_request:
-    types: [ closed ]
+    branches:
+      - 'master'
 
 jobs:
   push_to_registry:
@@ -35,11 +41,17 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Docker meta
         id: meta
-        uses: docker/metadata-action@v5.0.0
+        uses: docker/metadata-action@v4
         with:
-          images: sever3d/piazza-api
+          images: |
+            name/app
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
