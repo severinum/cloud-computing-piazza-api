@@ -42,13 +42,13 @@ jobs:
           install_components: 'gke-gcloud-auth-plugin'
           export_default_credentials: true
 
-      - name: Build and Push the Docker Image
-        env:
-          GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
-        run: | 
-          gcloud auth configure-docker us-east1-docker.pkg.dev
-          docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest .
-          docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest
+      # - name: Build and Push the Docker Image to Artifact Registry
+      #   env:
+      #     GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
+      #   run: | 
+      #     gcloud auth configure-docker us-east1-docker.pkg.dev
+      #     docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest .
+      #     docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest
 
       - name: Deploy to GKE
         env: 
