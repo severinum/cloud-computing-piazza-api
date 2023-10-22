@@ -50,17 +50,6 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
        
-      - name: Printowanie
-        run: |
-          echo "Kalkulate"
-          echo ${{ steps.calculate.outputs.version }}
-          echo "Meta ------- tags"
-          echo ${{ steps.meta.outputs.tags }}
-          echo "Meta ------- labels"
-          echo ${{ steps.meta.outputs.labels }}
-
-
-    
       - name: Install the gcloud cli
         uses: google-github-actions/setup-gcloud@v0
         with:
