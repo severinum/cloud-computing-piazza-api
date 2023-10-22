@@ -3,12 +3,12 @@ name: Publish DockerHub deploy GCP K8S
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
     tags:
       - 'v*'
   pull_request:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   push_to_registry:
