@@ -156,6 +156,7 @@ router.delete('/:userId', authUser, authRole("admin"),  async (req, res) => {
 
 })
 
+
 /* 
 *   GET All Users
 */
@@ -165,6 +166,21 @@ router.get('/', authUser, async (req, res) => {
         return res.status(200).send(users)
     } catch (err) {
         return res.status(404).send({message: "Not found"})
+    }
+})
+
+/* 
+*   GET one user
+*/
+router.get('/:userId', authUser, async (req, res) => {
+    LOGGER.log("Get one user with id: " + req.params.userId, req)
+    try {
+        const user = await User.findById(req.params.userId)
+        return res.status(200).send(userToUserDTO(user))
+    } catch (err) {
+        LOGGER.log("ERROR. Get user with id :" + req.params.userId +
+            ", ERROR: " + err, req)
+        return res.status(409).send({ message: "Error when getting user" })
     }
 })
 
