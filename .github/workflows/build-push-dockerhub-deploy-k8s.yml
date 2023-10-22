@@ -1,15 +1,12 @@
 name: Publish DockerHub deploy GCP K8S
 
 on:
-  pull_request:
-    types: [ closed ]
+  push:
+    tags:
+      '*'
 
 jobs:
-  semver:
-    uses: UKHomeOffice/sas-github-workflows/.github/workflows/semver-tag.yml@v2
-
   push_to_registry:
-    needs: semver
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
     steps:
