@@ -1,4 +1,4 @@
-name: 'SemVer Tag and Docker Build'
+name: 'SemVer Tag and Docker Build and Push'
 on:
   pull_request:
     types: [ closed ]
