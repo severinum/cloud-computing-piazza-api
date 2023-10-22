@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: piazza-api
-        image:  us-east1-docker.pkg.dev/GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest
+        image:  sever3d/piazza-api:latest
         imagePullPolicy: Always
         env:
         - name: MURL
