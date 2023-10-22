@@ -52,8 +52,11 @@ jobs:
        
       - name: Printowanie
         run: |
+          echo "Kalkulate"
           echo ${{ steps.calculate.outputs.version }}
+          echo "Meta ------- tags"
           echo ${{ steps.meta.outputs.tags }}
+          echo "Meta ------- labels"
           echo ${{ steps.meta.outputs.labels }}
 
 
