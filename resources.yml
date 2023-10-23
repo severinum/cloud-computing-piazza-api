@@ -38,8 +38,8 @@ spec:
           value: TOKEN_SECRET_STRING
         resources:
           requests:
-            memory: "256Mi"
-            cpu: "250m"
+            memory: "128Mi"
+            cpu: "100m"
           limits:
             memory: "600Mi"
             cpu: "500m"
