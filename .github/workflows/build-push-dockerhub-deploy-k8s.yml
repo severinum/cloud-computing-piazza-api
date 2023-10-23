@@ -6,10 +6,7 @@ on:
 
 
 jobs:
-  # semver:
-  #   uses: UKHomeOffice/sas-github-workflows/.github/workflows/semver-tag.yml@v2
   tag_push__deploy:
-    # needs: semver
     name: Tag,Push Image to Docker Hub and Deploy to GCP K8S
     if: |
       github.event.pull_request.merged == true &&
@@ -19,14 +16,9 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
       
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-        
-          
+      
+      ##### Semanically tag repository and return given tag
+      # Label can be : major,minor,patch or skip-release
       - name: Parse the SemVer label (semver)
         id: label
         uses: UKHomeOffice/match-label-action@v1
@@ -49,11 +41,12 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           move_major_tag: ${{ inputs.moveMajor || 'true' }}
   
-
-
-      - name : Drukuj
-        run: |
-          echo ${{ steps.calculate.outputs.version }}     
+      ##### Build and push Docker Image (multiarch.) to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
       
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -78,6 +71,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
        
+      ##### Interact with GCP clound     
       - name: Install the gcloud cli
         uses: google-github-actions/setup-gcloud@v0
         with:
@@ -86,6 +80,7 @@ jobs:
           install_components: 'gke-gcloud-auth-plugin'
           export_default_credentials: true
 
+      ## Push image to GCP Artifact Registry (commented out now to save money)
       # - name: Build and Push the Docker Image to Artifact Registry
       #   env:
       #     GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
@@ -94,6 +89,7 @@ jobs:
       #     docker build -t us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest .
       #     docker push us-east1-docker.pkg.dev/$GOOGLE_PROJECT_ID/piazza-api/piazza-api:latest
 
+      # Deploy to K8S Cluster on GCP
       - name: Deploy to GKE
         env: 
             GOOGLE_PROJECT_ID: ${{ secrets.GOOGLE_PROJECT_ID }}
