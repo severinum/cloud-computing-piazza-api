@@ -26,9 +26,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
 
-
-
-
       - name: Parse the SemVer label
         id: label
         uses: UKHomeOffice/match-label-action@v1
