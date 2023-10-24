@@ -37,7 +37,15 @@ const userSchema = mongoose.Schema({
     active: {
         type:Boolean,
         default:true
-    }
+    },
+    activities: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Activity"
+    }],
+    posts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post"
+    }]
 });
 
-module.exports = mongoose.model('users', userSchema)
+module.exports = mongoose.model('User', userSchema)

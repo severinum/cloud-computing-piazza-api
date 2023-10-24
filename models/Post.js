@@ -33,7 +33,15 @@ const postsSchema = mongoose.Schema({
         type: String,
         required: true,
         max:256
-    }
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
+    activities: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Activity"
+    }]
 })
 
-module.exports = mongoose.model('posts', postsSchema)
+module.exports = mongoose.model('Post', postsSchema)
