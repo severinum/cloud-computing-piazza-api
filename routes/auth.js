@@ -162,7 +162,7 @@ router.delete('/:userId', authUser, authRole("admin"),  async (req, res) => {
 */
 router.get('/', authRole('admin'), async (req, res) => {
     try {
-        const users = await User.find()
+        const users = await User.find().populate("activities")
         return res.status(200).send(users)
     } catch (err) {
         return res.status(404).send({message: "Not found"})
@@ -175,7 +175,7 @@ router.get('/', authRole('admin'), async (req, res) => {
 router.get('/:userId', authRole('admin'), async (req, res) => {
     LOGGER.log("Get one user with id: " + req.params.userId, req)
     try {
-        const user = await User.findById(req.params.userId)
+        const user = await User.findById(req.params.userId).populate("activities")
         return res.status(200).send(userToUserDTO(user))
     } catch (err) {
         LOGGER.log("ERROR. Get user with id :" + req.params.userId +

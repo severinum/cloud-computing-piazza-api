@@ -30,7 +30,15 @@ const activitySchema = mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    },
+    post: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post"
     }
 })
 
-module.exports = mongoose.model('activities', activitySchema)
+module.exports = mongoose.model('Activity', activitySchema)
