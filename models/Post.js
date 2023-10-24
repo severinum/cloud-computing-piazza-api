@@ -12,7 +12,7 @@ const postsSchema = mongoose.Schema({
         max: 256
     },
     category: {
-        type:Array,
+        type: Array,
         default: ["unknown"]
     },
     body: {
@@ -32,7 +32,7 @@ const postsSchema = mongoose.Schema({
     owner_id: {
         type: String,
         required: true,
-        max:256
+        max: 256
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,

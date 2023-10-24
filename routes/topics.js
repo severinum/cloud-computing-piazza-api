@@ -5,7 +5,6 @@
 const express = require('express')
 const router = express.Router()
 const { authUser, authRole } = require('../verifyToken') // Verify JWT Tokens
-const Logger = require('../utils/Logger');
 
 const TopicController = require("../controllers/TopicController")
 

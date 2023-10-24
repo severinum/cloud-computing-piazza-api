@@ -16,7 +16,7 @@ const registerValidation = (data) => {
 
 const topicValidation = (data) => {
     const schemaValidation = joi.object({
-            name: joi.string().required().min(3).max(265).trim(true)
+        name: joi.string().required().min(3).max(265).trim(true)
     })
 
     return schemaValidation.validate(data)
@@ -32,10 +32,10 @@ const loginValidation = (data) => {
 
 const postValidation = (data) => {
     const schemaValidation = joi.object({
-            title: joi.string().required().min(3).max(265).trim(true),
-            category: joi.array().items(joi.string().alphanum().trim(true)),
-            body: joi.string().required().min(3).max(3000).trim(true),
-            expiration_time: joi.number().integer()
+        title: joi.string().required().min(3).max(265).trim(true),
+        category: joi.array().items(joi.string().alphanum().trim(true)),
+        body: joi.string().required().min(3).max(3000).trim(true),
+        expiration_time: joi.number().integer()
     })
 
     return schemaValidation.validate(data)
@@ -43,9 +43,9 @@ const postValidation = (data) => {
 
 const activityValidation = (data) => {
     const schemaValidation = joi.object({
-            post_id: joi.string().required().min(3).max(265).trim(true),
-            type: joi.string().required().min(3).max(50).trim(true),
-            body: joi.string().required().min(1).max(512).trim(true)
+        post_id: joi.string().required().min(3).max(265).trim(true),
+        type: joi.string().required().min(3).max(50).trim(true),
+        body: joi.string().required().min(1).max(512).trim(true)
     })
 
     return schemaValidation.validate(data)

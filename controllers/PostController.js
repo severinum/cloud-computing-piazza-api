@@ -242,14 +242,6 @@ module.exports = {
   }
 }
 
-
-
-
-
-
-
-
-
 /*
 * Transform Post object do PostDTO. It is adding caluclated fields"
 */

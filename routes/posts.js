@@ -18,5 +18,4 @@ router.get('/top/:topicName', authUser, PostController.getTopicTopPost)
 router.delete('/all', authUser, authRole('admin'), PostController.deleteAll)
 router.delete('/:postId', authUser, authOwner, PostController.delete)
 
-
 module.exports = router
