@@ -6,9 +6,9 @@ const jsonwebtoken = require('jsonwebtoken')
 const dotenv = require('dotenv')
 const jwt_decode = require('jwt-decode')
 
-function Token(req){
+function Token(req) {
     const tokenString = req.header('Authorization');
-    if(!tokenString) {
+    if (!tokenString) {
         return false
     }
     // Split tokenString (Remove 'Bearer' part)

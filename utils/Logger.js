@@ -3,7 +3,7 @@
  *  Date: October 2023
  */
 
-const {Token, TokenDecoded} = require('./Token');
+const { Token, TokenDecoded } = require('./Token');
 const LogModel = require('../models/Log');
 
 class Logger {
@@ -12,7 +12,7 @@ class Logger {
      * Method will display display lon in console and save it to MongoDB (logs collection)
      * 
      * @param {String} message Message to be displayed/save to db
-     * @param {Request} req Reguest. If not null, request contain User data used for log
+     * @param {Request} req Request. If not null, request contain User data used for log
      */
     log(message, req) {
         let logMessage = ""
@@ -37,7 +37,7 @@ class Logger {
         })
         logToSave.save()
 
-        logMessage = "{"+ logTime +"} " + logMessage
+        logMessage = "{" + logTime + "} " + logMessage
         console.log(logMessage)
     }
 

@@ -12,7 +12,6 @@ const { activityValidation } = require('../validators/validation');
 const Activity = require('../models/Activity')
 const Post = require('../models/Post')
 const User = require('../models/User')
-// const Topic = require('../models/Topic')
 
 module.exports = {
   create: async (req, res) => {
@@ -23,7 +22,6 @@ module.exports = {
     if (error) {
       return res.status(500).send({ message: error['details'][0]['message'] })
     }
-
 
     // Get post
     let post = null
@@ -198,7 +196,6 @@ module.exports = {
     }
   },
 }
-
 
 const validateActivityInputs = (type, body) => {
 

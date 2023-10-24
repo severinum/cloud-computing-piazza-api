@@ -29,14 +29,14 @@ const userSchema = mongoose.Schema({
         default: Date.now
     },
     roles: {
-        type:Array,
-        min:3,
-        max:100,
+        type: Array,
+        min: 3,
+        max: 100,
         default: ["user"]
     },
     active: {
-        type:Boolean,
-        default:true
+        type: Boolean,
+        default: true
     },
     activities: [{
         type: mongoose.Schema.Types.ObjectId,
