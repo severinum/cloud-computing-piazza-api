@@ -11,7 +11,7 @@ const TopicController = require("../controllers/TopicController")
 router.post('/', authUser, authRole("admin"), TopicController.create)
 router.get('/', authUser, TopicController.all)
 router.get('/:topicId', authUser, TopicController.one)
-router.delete("/all", authUser, authRole("admin"), TopicController.deleteAll)
-router.delete("/:topicId", authUser, authRole("admin"), TopicController.delete)
+router.delete("/all", authRole("admin"), TopicController.deleteAll)
+router.delete("/:topicId", authRole("admin"), TopicController.delete)
 
 module.exports = router

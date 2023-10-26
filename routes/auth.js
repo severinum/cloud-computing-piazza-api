@@ -15,7 +15,7 @@ router.post('/find', authUser, AuthController.find)
 router.patch('/', authUser, AuthController.update)
 router.get('/', authUser,  AuthController.getAll)
 router.get('/:userId', authUser,  AuthController.getOne)
-router.delete('/all', authUser, authRole('admin'),  AuthController.deleteAll)
-router.delete('/:userId', authUser, authRole('admin'),  AuthController.delete)
+router.delete('/all', authRole('admin'),  AuthController.deleteAll)
+router.delete('/:userId', authRole('admin'),  AuthController.delete)
 
 module.exports = router;

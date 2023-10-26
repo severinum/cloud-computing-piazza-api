@@ -14,7 +14,7 @@ router.get('/likes', authUser,ActivityController.likes)
 router.get('/dislikes', authUser,ActivityController.dislikes)
 router.get('/comments', authUser,ActivityController.comments)
 router.get('/:activityId', authUser, ActivityController.one)
-router.delete('/all', authUser, authRole('admin'), ActivityController.deleteAll)
-router.delete('/:activityId', authUser, authOwner, ActivityController.delete)
+router.delete('/all', authRole('admin'), ActivityController.deleteAll)
+router.delete('/:activityId', authRole('admin'), ActivityController.delete)
 
 module.exports = router

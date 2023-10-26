@@ -15,7 +15,7 @@ router.get('/:postId', authUser, PostController.findOne)
 router.get('/topic/:topicName', authUser, PostController.postsByTopic)
 router.get('/expired/:topicName', authUser, PostController.expiredTopicPosts)
 router.get('/top/:topicName', authUser, PostController.getTopicTopPost)
-router.delete('/all', authUser, authRole('admin'), PostController.deleteAll)
-router.delete('/:postId', authUser, authOwner, PostController.delete)
+router.delete('/all', authRole('admin'), PostController.deleteAll)
+router.delete('/:postId', authRole('admin'), PostController.delete)
 
 module.exports = router
