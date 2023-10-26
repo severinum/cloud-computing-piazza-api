@@ -17,7 +17,7 @@ app.use(bodyParser.json())
 // ** App Routes ** //
 // Route: Posts
 const postsRoute = require('./routes/posts')
-app.use('/api/v1/posts', postsRoute)
+app.use('/api/v1/post', postsRoute)
 
 // Route: Activity
 const activitiesRoute = require('./routes/activity')
@@ -25,11 +25,11 @@ app.use('/api/v1/activity', activitiesRoute)
 
 // Route: Auth
 const authRoute = require('./routes/auth')
-app.use('/api/v1/users', authRoute)
+app.use('/api/v1/user', authRoute)
 
 // Route: Topics
 const topicsRoute = require('./routes/topics')
-app.use('/api/v1/topics', topicsRoute)
+app.use('/api/v1/topic', topicsRoute)
 
 // ** MongoDB ** //
 MURL = process.env.MURL
