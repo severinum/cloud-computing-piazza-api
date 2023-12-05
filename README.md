@@ -17,3 +17,7 @@ Required properties in a file:
 - `TOKEN_SECRET` example: TOKEN_SECRET=abcdefghijklmnopqrstuvwxyz1234567890
 
 - `TOKEN_EXPIRY_TIME` example: TOKEN_EXPIRY_TIME="10d"
+
+## Deployment
+
+API is deployed to GCP VP as well as to GCP K8S cluster. URLs should be availabe in the report sent for marking. 
